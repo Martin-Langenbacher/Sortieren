@@ -7,7 +7,6 @@ import java.util.Collections;
 public class RunSortieren {
 
 	public static void main(String[] args) throws InterruptedException, IOException {
-		// TODO Auto-generated method stub
 
 		InputStreamReader isr = new InputStreamReader(System.in);
 		BufferedReader br = new BufferedReader(isr);
@@ -19,6 +18,7 @@ public class RunSortieren {
 		int zaehler = 0;
 		String eingabe;
 		int sortMethod = 1;
+		String mergeSort = "MergeSort";
 
 		// Welche Sortier-Methode?
 		while (zaehler == 0) {
@@ -28,7 +28,7 @@ public class RunSortieren {
 				System.out.println("1: BubbleSort");
 				System.out.println("2: SelectionSort");
 				System.out.println("3: QuickSort");
-				System.out.println("4: MergeSort");
+				System.out.println("4: " +mergeSort);
 				System.out.println("5: xy-Sort");
 				eingabe = br.readLine();
 				sortMethod = Integer.parseInt(eingabe);
@@ -141,7 +141,7 @@ public class RunSortieren {
 
 //========================================================================================	MergeSearch
 
-	public static void mergeSort(ArrayList<Balken> balken, int anzahlBalken) {
+	public static void mergeSort(ArrayList<Balken> balken, int anzahlBalken) throws InterruptedException {
 
 		String[] balkenArray;
 		balkenArray = new String[anzahlBalken];
@@ -158,7 +158,7 @@ public class RunSortieren {
 
 // mergeSort 2: mit Start- und End-Wert	
 
-	private static void mergeSort(ArrayList<Balken> balken, String[] balkenArray, int start, int end, int anzahlBalken) {
+	private static void mergeSort(ArrayList<Balken> balken, String[] balkenArray, int start, int end, int anzahlBalken) throws InterruptedException {
 
 		if (start < end) {
 
@@ -167,14 +167,14 @@ public class RunSortieren {
 			mergeSort(balken, balkenArray, start, middle, anzahlBalken);
 			mergeSort(balken, balkenArray, middle + 1, end, anzahlBalken);
 
-			merge(balkenArray, start, middle, end, anzahlBalken);
+			merge(balken, balkenArray, start, middle, end, anzahlBalken);
 
 		}
 	}
 
 // merge: Belongs to mergeSort
 
-	private static void merge(String[] balkenArray, int start, int middle, int end, int anzahlBalken) {
+	private static void merge(ArrayList<Balken> balken, String[] balkenArray, int start, int middle, int end, int anzahlBalken) throws InterruptedException {
 
 		int size_left = middle - start + 1;
 		int size_right = end - middle;
@@ -194,29 +194,60 @@ public class RunSortieren {
 		while (i < size_left && j < size_right) {
 			if (strings_left[i].length() <= strings_right[j].length()) {
 				balkenArray[k] = strings_left[i];
-				balken.
-				
-				// balken.get(j).setBalken(tempString);
-				// balkenArray[i] = balken.get(i).getBalken();
+				balken.get(k).setBalken(strings_left[i]);
+				printBalken(balken, anzahlBalken, "MergeSort");
 				i++;
 			} else {
 				balkenArray[k] = strings_right[j];
+				balken.get(k).setBalken(strings_right[j]);
+				printBalken(balken, anzahlBalken, "MergeSort");
 				j++;
 			}
 			k++;
 		}
+		
 
 		while (i < size_left) {
 			balkenArray[k] = strings_left[i];
+			balken.get(k).setBalken(strings_left[i]);
+			printBalken(balken, anzahlBalken, "MergeSort");
 			i++;
 			k++;
 		}
 		while (j < size_right) {
 			balkenArray[k] = strings_right[j];
+			balken.get(k).setBalken(strings_right[j]);
+			printBalken(balken, anzahlBalken, "MergeSort");
 			j++;
 			k++;
 		}
 	}
+	
+
+//==========================================================================================================Print - Print - Print	
+//==========================================================================================================	
+	
+	private static void printBalken(ArrayList<Balken> balken, int anzahlBalken, String text) throws InterruptedException {
+		
+		System.out.println(" ");
+		System.out.println(
+				"=====>>>   " +text + "   <<<============================================================================================");
+
+		for (int m = 0; m < anzahlBalken; m++) {
+			System.out.println(balken.get(m).getBalken());
+		}
+
+		// Zeitverzögerung
+		// slowing down time...
+		Thread.sleep(100, 0);
+		// end of "show the balken ....
+		
+	}
+//==========================================================================================================	
+//========================================================================================================== End-Print // End-Print	
+	
+	
+	
 
 //========================================================================================	QuickSort
 
@@ -241,10 +272,8 @@ public class RunSortieren {
 			throws InterruptedException {
 
 		int pivot = balken.get(end).getNumber();
-		// int pivot = numbers[end];
 
 		int i = start - 1;
-		// int i = start - 1;
 
 		for (int j = start; j < end; j++) {
 
@@ -261,20 +290,8 @@ public class RunSortieren {
 
 //*************************************************************************************************************			
 			// show the balken...
-			System.out.println(" ");
-			System.out.println(
-					"=====>>>   QuickSort   <<<============================================================================================");
-
-			for (int k = 0; k < anzahlBalken; k++) {
-				System.out.println(balken.get(k).getBalken());
-			}
-
-			// Zeitverzögerung
-			// slowing down time...
-			Thread.sleep(100, 0);
-			// end of "show the balken ....
-//*************************************************************************************************************				
-
+			printBalken(balken, anzahlBalken, "QuickSort");
+//*************************************************************************************************************	
 		}
 
 		int temp = balken.get(i + 1).getNumber();
@@ -298,9 +315,6 @@ public class RunSortieren {
 
 			for (int j = i + 1; j < anzahlBalken; j++) {
 
-				System.out.println(" ");
-				System.out.println(
-						"=====>>>   SelectionSort   <<<============================================================================================");
 
 				if (balken.get(i).getNumber() > balken.get(j).getNumber()) {
 					tempInt = balken.get(i).getNumber();
@@ -316,19 +330,10 @@ public class RunSortieren {
 					// balken.get(j).setNumber(tempInt);
 					// balken.get(j).setBalken(tempString);
 				}
-
-				for (int k = 0; k < anzahlBalken; k++) {
-					System.out.println(balken.get(k).getBalken());
-				}
-
-				// Zeitverzögerung
-				// slowing down time...
-				Thread.sleep(50, 0);
-
+				
+				printBalken(balken, anzahlBalken, "QuickSort");
 			}
-
 		}
-
 	}
 
 //========================================================================================	bubbleSort
@@ -341,9 +346,6 @@ public class RunSortieren {
 		for (int i = 1; i < anzahlBalken; i++) {
 
 			for (int j = anzahlBalken - 1; j >= i; j--) {
-				System.out.println(" ");
-				System.out.println(
-						"=====>>>   BubbleSort   <<<============================================================================================");
 
 				if (balken.get(j - 1).getNumber() > balken.get(j).getNumber()) {
 					tempInt = balken.get(j - 1).getNumber();
@@ -353,19 +355,9 @@ public class RunSortieren {
 					balken.get(j).setNumber(tempInt);
 					balken.get(j).setBalken(tempString);
 				}
-
-				for (int k = 0; k < anzahlBalken; k++) {
-					System.out.println(balken.get(k).getBalken());
-				}
-
-				// Zeitverzögerung
-				// slowing down time...
-				Thread.sleep(50, 0);
-
+				
+				printBalken(balken, anzahlBalken, "BubbleSort");
 			}
-
 		}
-
 	}
-
 }
