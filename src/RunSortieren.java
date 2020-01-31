@@ -67,7 +67,7 @@ public class RunSortieren {
 					+ "y-Pos: " + balken.get(i).getyPos());
 		}
 
-		// Mische Karten:
+		// Mische Balken:
 		Collections.shuffle(balken);
 
 		System.out.println("Balken nach dem Mischen===================================");
