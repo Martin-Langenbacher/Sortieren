@@ -19,6 +19,7 @@ public class RunSortieren {
 		String eingabe;
 		int sortMethod = 1;
 		String mergeSort = "MergeSort";
+		String heapSort = "HeapSort";
 
 		// Welche Sortier-Methode?
 		while (zaehler == 0) {
@@ -28,8 +29,8 @@ public class RunSortieren {
 				System.out.println("1: BubbleSort");
 				System.out.println("2: SelectionSort");
 				System.out.println("3: QuickSort");
-				System.out.println("4: " +mergeSort);
-				System.out.println("5: xy-Sort");
+				System.out.println("4: " + mergeSort);
+				System.out.println("5: " + heapSort);
 				eingabe = br.readLine();
 				sortMethod = Integer.parseInt(eingabe);
 			}
@@ -107,9 +108,10 @@ public class RunSortieren {
 			break;
 		case 5:
 			// ======================================================================
-			// xxxxxxxxxxxxxxxxxx
+			// HeapSort
 			// ======================================================================
-			// bubbleSort(balken, anzahlBalken);
+			System.out.println("NOT implemented yet...!!!!!!!!!!!!!!!!!");
+			heapSort(balken, anzahlBalken); // bubbleSort(balken, anzahlBalken);
 			break;
 
 		default:
@@ -153,12 +155,10 @@ public class RunSortieren {
 		mergeSort(balken, balkenArray, 0, anzahlBalken - 1, anzahlBalken);
 	}
 
-
-	
-
 // mergeSort 2: mit Start- und End-Wert	
 
-	private static void mergeSort(ArrayList<Balken> balken, String[] balkenArray, int start, int end, int anzahlBalken) throws InterruptedException {
+	private static void mergeSort(ArrayList<Balken> balken, String[] balkenArray, int start, int end, int anzahlBalken)
+			throws InterruptedException {
 
 		if (start < end) {
 
@@ -174,7 +174,8 @@ public class RunSortieren {
 
 // merge: Belongs to mergeSort
 
-	private static void merge(ArrayList<Balken> balken, String[] balkenArray, int start, int middle, int end, int anzahlBalken) throws InterruptedException {
+	private static void merge(ArrayList<Balken> balken, String[] balkenArray, int start, int middle, int end,
+			int anzahlBalken) throws InterruptedException {
 
 		int size_left = middle - start + 1;
 		int size_right = end - middle;
@@ -205,7 +206,6 @@ public class RunSortieren {
 			}
 			k++;
 		}
-		
 
 		while (i < size_left) {
 			balkenArray[k] = strings_left[i];
@@ -222,16 +222,16 @@ public class RunSortieren {
 			k++;
 		}
 	}
-	
 
 //==========================================================================================================Print - Print - Print	
 //==========================================================================================================	
-	
-	private static void printBalken(ArrayList<Balken> balken, int anzahlBalken, String text) throws InterruptedException {
-		
+
+	private static void printBalken(ArrayList<Balken> balken, int anzahlBalken, String text)
+			throws InterruptedException {
+
 		System.out.println(" ");
-		System.out.println(
-				"=====>>>   " +text + "   <<<============================================================================================");
+		System.out.println("=====>>>   " + text
+				+ "   <<<============================================================================================");
 
 		for (int m = 0; m < anzahlBalken; m++) {
 			System.out.println(balken.get(m).getBalken());
@@ -241,14 +241,12 @@ public class RunSortieren {
 		// slowing down time...
 		Thread.sleep(100, 0);
 		// end of "show the balken ....
-		
+
 	}
 //==========================================================================================================	
 //========================================================================================================== End-Print // End-Print	
-	
-	
-	
 
+	
 //========================================================================================	QuickSort
 
 	public static void quickSort(ArrayList<Balken> balken, int anzahlBalken) throws InterruptedException {
@@ -315,7 +313,6 @@ public class RunSortieren {
 
 			for (int j = i + 1; j < anzahlBalken; j++) {
 
-
 				if (balken.get(i).getNumber() > balken.get(j).getNumber()) {
 					tempInt = balken.get(i).getNumber();
 					tempString = balken.get(i).getBalken();
@@ -330,7 +327,7 @@ public class RunSortieren {
 					// balken.get(j).setNumber(tempInt);
 					// balken.get(j).setBalken(tempString);
 				}
-				
+
 				printBalken(balken, anzahlBalken, "QuickSort");
 			}
 		}
@@ -355,9 +352,84 @@ public class RunSortieren {
 					balken.get(j).setNumber(tempInt);
 					balken.get(j).setBalken(tempString);
 				}
-				
+
 				printBalken(balken, anzahlBalken, "BubbleSort");
 			}
 		}
 	}
+
+//========================================================================================	HeapSort	
+// public static void quickSort(ArrayList<Balken> balken, int anzahlBalken) throws InterruptedException {
+
+	private static void heapSort(ArrayList<Balken> balken, int anzahlBalken) throws InterruptedException {
+
+		String[] balkenArray;
+		balkenArray = new String[anzahlBalken];
+
+		for (int i = 0; i < anzahlBalken; i++) {
+			balkenArray[i] = balken.get(i).getBalken();
+		}
+
+		// heap size (amount of unsorted numbers)
+		int size = anzahlBalken; // ... this is "anzahlBalken" ...
+
+		// build max heap
+		for (int i = size / 2 - 1; i >= 0; i--) {
+			heapify(balken, balkenArray, size, i, anzahlBalken);
+		}
+
+		// sort numbers
+		for (int i = size - 1; i >= 0; i--) {
+
+			// move root to sorted numbers
+			String x = balkenArray[0];
+			balkenArray[0] = balkenArray[i];
+			balken.get(0).setBalken(balkenArray[i]);
+			balkenArray[i] = x;
+			balken.get(i).setBalken(x);
+			
+			
+			// bring largest number to the top
+			heapify(balken, balkenArray, i, 0, anzahlBalken);
+		}
+
+	}
+
+	// brings the largest number to the top
+	private static void heapify(ArrayList<Balken> balken, String[] balkenArray, int size, int i, int anzahlBalken) throws InterruptedException {
+
+		//
+		int parent = i;
+		int left_child = 2 * i + 1;
+		int right_child = 2 * i + 2;
+
+		// check left child
+		if (left_child < size && balkenArray[left_child].length() > balkenArray[parent].length())
+			parent = left_child;
+
+		// check right child
+		if (right_child < size && balkenArray[right_child].length() > balkenArray[parent].length())
+			parent = right_child;
+
+		// a child is larger than parent?
+		if (parent != i) {
+
+			// swap child and parent
+			String temp = balkenArray[i];
+			balkenArray[i] = balkenArray[parent];
+			balken.get(i).setBalken(balkenArray[parent]);
+			balkenArray[parent] = temp;
+			balken.get(i).setBalken(temp);
+			printBalken(balken, anzahlBalken, "HeapSort");
+			
+
+			// continue with swapped child (recursive)
+			heapify(balken, balkenArray, size, parent, anzahlBalken);
+
+		}
+
+	}
+
 }
+
+
